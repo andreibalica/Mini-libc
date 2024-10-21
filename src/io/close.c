@@ -1,12 +1,15 @@
 // SPDX-License-Identifier: BSD-3-Clause
 
-#include <unistd.h>
+#include <errno.h>
 #include <internal/syscall.h>
 #include <stdarg.h>
-#include <errno.h>
+#include <unistd.h>
 
-int close(int fd)
-{
-	/* TODO: Implement close(). */
-	return -1;
+int close(int fd) {
+  int ret = syscall(__NR_close, fd);
+  if (ret < 0) {
+    errno = -ret;
+    return -1;
+  }
+  return ret;
 }
