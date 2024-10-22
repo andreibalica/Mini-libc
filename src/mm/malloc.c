@@ -9,14 +9,25 @@
 
 void *malloc(size_t size)
 {
-	/* TODO: Implement malloc(). */
-	return NULL;
+	void *ret = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+	if(ret == MAP_FAILED)
+		return NULL;
+	mem_list_head.len = size;
+	mem_list_add(ret, size);
+	return ret;
 }
 
 void *calloc(size_t nmemb, size_t size)
 {
-	/* TODO: Implement calloc(). */
-	return NULL;
+	size_t total_size = nmemb * size;
+	void *ret = mmap(NULL, total_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+	if(ret == MAP_FAILED) {
+		return NULL;
+	}
+	memset(ret, 0, total_size);
+    mem_list_head.len = total_size;
+    mem_list_add(ret, total_size);
+	return ret;
 }
 
 void free(void *ptr)

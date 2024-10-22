@@ -39,7 +39,7 @@ char *strncat(char *destination, const char *source, size_t len) {
 }
 
 int strcmp(const char *str1, const char *str2) {
-  char *p1, *p2;
+  const char *p1, *p2;
   for (p1 = str1, p2 = str2; *p1 != '\0' && *p2 != '\0'; p1++, p2++) {
     if (*p1 < *p2)
       return -1;
@@ -54,7 +54,7 @@ int strcmp(const char *str1, const char *str2) {
 }
 
 int strncmp(const char *str1, const char *str2, size_t len) {
-  char *p1, *p2;
+  const char *p1, *p2;
   size_t k;
   for (p1 = str1, p2 = str2, k = 0; *p1 != '\0' && *p2 != '\0' && k < len;
        p1++, p2++, k++) {
@@ -82,53 +82,53 @@ size_t strlen(const char *str) {
 }
 
 char *strchr(const char *str, int c) {
-  char *p;
+  const char *p;
   for (p = str; *p != '\0'; p++)
     if (*p == c)
-      return p;
+      return (char *)p;
   return NULL;
 }
 
 char *strrchr(const char *str, int c) {
-  char *p;
+  const char *p;
   for (p = str + strlen(str) - 1; p >= str; p--)
     if (*p == c)
-      return p;
+      return (char *)p;
   return NULL;
 }
 
 char *strstr(const char *haystack, const char *needle) {
-  char *p;
+  const char *p;
   for (p = haystack; *p != '\0'; p++)
     if (*p == *needle) {
-      char *k1, *k2;
+      const char *k1, *k2;
       for (k1 = p, k2 = needle; *k1 != '\0' && *k2 != '\0' && *k1 == *k2;
            k1++, k2++)
         ;
       if (*k2 == '\0')
-        return p;
+        return (char *)p;
     }
   return NULL;
 }
 
 char *strrstr(const char *haystack, const char *needle) {
-  char *p;
+  const char *p;
   for (p = haystack + strlen(haystack) - 1; p >= haystack; p--)
     if (*p == *(needle + strlen(needle) - 1)) {
-      char *k1, *k2;
+      const char *k1, *k2;
       for (k1 = p, k2 = needle + strlen(needle) - 1;
            k1 >= haystack && k2 >= needle && *k1 == *k2; k1--, k2--)
         ;
       if (k2 < needle)
-        return k1 + 1;
+        return (char *)k1 + 1;
     }
   return NULL;
 }
 
 void *memcpy(void *destination, const void *source, size_t num) {
   char *p;
-  unsigned char *dest = destination;
-  unsigned char *src = source;
+  char *dest = destination;
+  const char *src = source;
   size_t k = 0;
   for (p = dest, k = 0; k < num; src++, p++, k++)
     *p = *src;
@@ -136,9 +136,8 @@ void *memcpy(void *destination, const void *source, size_t num) {
 }
 
 void *memmove(void *destination, const void *source, size_t num) {
-  char *p;
-  unsigned char *dest = destination;
-  unsigned char *src = source;
+  char *dest = destination;
+  const char *src = source;
   size_t k;
   if (dest == src)
     return destination;
@@ -155,8 +154,8 @@ void *memmove(void *destination, const void *source, size_t num) {
 }
 
 int memcmp(const void *ptr1, const void *ptr2, size_t num) {
-  unsigned char *p1 = ptr1;
-  unsigned char *p2 = ptr2;
+  const char *p1 = ptr1;
+  const char *p2 = ptr2;
   size_t k = 0;
   for (k = 0; k < num; p1++, p2++, k++) {
     if (*p1 < *p2)
